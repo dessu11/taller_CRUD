@@ -14,6 +14,7 @@ List<Pago> crearPagosDemostracion() {
       fechaVencimiento: relativo(3),
       pagado: false,
       nota: 'Factura mensual',
+      responsable: 'Edward',
     ),
     Pago(
       id: 'demo-2',
@@ -23,6 +24,7 @@ List<Pago> crearPagosDemostracion() {
       fechaVencimiento: relativo(-2),
       pagado: false,
       nota: 'Revisar antes de pagar',
+      responsable: 'Andres',
     ),
     Pago(
       id: 'demo-3',
@@ -32,6 +34,7 @@ List<Pago> crearPagosDemostracion() {
       fechaVencimiento: relativo(-1),
       pagado: true,
       nota: '',
+      responsable: 'Yo',
     ),
   ];
 }

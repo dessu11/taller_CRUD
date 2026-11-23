@@ -11,6 +11,7 @@ class TarjetaPago extends StatelessWidget {
   final VoidCallback onEditar;
   final VoidCallback onEliminar;
   final VoidCallback onCambiarEstado;
+
   const TarjetaPago({
     super.key,
     required this.pago,
@@ -18,6 +19,7 @@ class TarjetaPago extends StatelessWidget {
     required this.onEliminar,
     required this.onCambiarEstado,
   });
+
   String get _estado {
     if (pago.pagado) return 'Pagado';
     final hoy = soloFecha(DateTime.now());
@@ -34,6 +36,7 @@ class TarjetaPago extends StatelessWidget {
         : _estado == 'Vencido'
         ? Theme.of(context).colorScheme.error
         : Theme.of(context).colorScheme.primary;
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
       child: ListTile(
@@ -52,6 +55,7 @@ class TarjetaPago extends StatelessWidget {
             Text(
               '${pago.categoria.etiqueta} · ${formatearFecha(pago.fechaVencimiento)}',
             ),
+            Text('Responsable: ${pago.responsable}'),
             const SizedBox(height: 4),
             Text(
               formatearPesos(pago.monto),
