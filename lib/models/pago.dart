@@ -27,6 +27,7 @@ class Pago {
   final DateTime fechaVencimiento;
   final bool pagado;
   final String nota;
+  final String responsable;
   const Pago({
     required this.id,
     required this.concepto,
@@ -35,6 +36,7 @@ class Pago {
     required this.fechaVencimiento,
     required this.pagado,
     required this.nota,
+    required this.responsable,
   });
   // Crear una versión actualizada sin modificar el objeto anterior.
   Pago copyWith({
@@ -44,6 +46,7 @@ class Pago {
     DateTime? fechaVencimiento,
     bool? pagado,
     String? nota,
+    String? responsable,
   }) {
     return Pago(
       id: id, // El identificador no cambia durante una edición.
@@ -53,6 +56,7 @@ class Pago {
       fechaVencimiento: fechaVencimiento ?? this.fechaVencimiento,
       pagado: pagado ?? this.pagado,
       nota: nota ?? this.nota,
+      responsable: responsable ?? this.responsable,
     );
   }
 }

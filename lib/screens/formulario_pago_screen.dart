@@ -8,6 +8,7 @@ import '../utils/formato.dart';
 class FormularioPagoScreen extends StatefulWidget {
   final Pago? pagoExistente; // null = creación; con valor = edición.
   const FormularioPagoScreen({super.key, this.pagoExistente});
+
   @override
   State<FormularioPagoScreen> createState() => _FormularioPagoScreenState();
 }
@@ -17,10 +18,13 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
   late final TextEditingController _conceptoController;
   late final TextEditingController _montoController;
   late final TextEditingController _notaController;
+  late final TextEditingController _responsableController;
   late CategoriaPago _categoria;
   late DateTime _fechaVencimiento;
   late bool _pagado;
+
   bool get _editando => widget.pagoExistente != null;
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +34,9 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
       text: pago?.monto.toString() ?? '',
     );
     _notaController = TextEditingController(text: pago?.nota ?? '');
+    _responsableController = TextEditingController(
+      text: pago?.responsable ?? '',
+    );
     _categoria = pago?.categoria ?? CategoriaPago.servicios;
     _fechaVencimiento = pago?.fechaVencimiento ?? DateTime.now();
     _pagado = pago?.pagado ?? false;
@@ -41,6 +48,7 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
     _conceptoController.dispose();
     _montoController.dispose();
     _notaController.dispose();
+    _responsableController.dispose();
     super.dispose();
   }
 
@@ -64,6 +72,7 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
     final concepto = _conceptoController.text.trim();
     final monto = int.parse(_montoController.text.trim());
     final nota = _notaController.text.trim();
+    final responsable = _responsableController.text.trim();
     final resultado = anterior == null
         ? Pago(
             id: DateTime.now().microsecondsSinceEpoch.toString(),
@@ -73,6 +82,7 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
             fechaVencimiento: _fechaVencimiento,
             pagado: _pagado,
             nota: nota,
+            responsable: responsable,
           )
         : anterior.copyWith(
             concepto: concepto,
@@ -81,8 +91,9 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
             fechaVencimiento: _fechaVencimiento,
             pagado: _pagado,
             nota: nota,
+            responsable: responsable,
           );
-    // Devuelve el pago a la pantalla anterior sin guardar en una BD todavía
+    // Devuelve el pago a la pantalla anterior sin guardar en una BD todavía.
     Navigator.pop(context, resultado);
   }
 
@@ -153,6 +164,23 @@ class _FormularioPagoScreenState extends State<FormularioPagoScreen> {
               onPressed: _seleccionarFecha,
               icon: const Icon(Icons.calendar_month_outlined),
               label: Text('Vence el ${formatearFecha(_fechaVencimiento)}'),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _responsableController,
+              maxLength: 40,
+              decoration: const InputDecoration(
+                labelText: 'Responsable del pago',
+                hintText: 'Ej.: Mamá, Papá, Yo',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.person_outline),
+              ),
+              validator: (valor) {
+                if (valor == null || valor.trim().isEmpty) {
+                  return 'Escriba el responsable del pago';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 12),
             TextFormField(
